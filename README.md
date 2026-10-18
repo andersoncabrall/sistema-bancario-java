@@ -1,80 +1,60 @@
-# 🏦 Sistema Bancário - Programação Orientada a Objetos em Java
+# 🏦 Sistema Bancário - Java Core
 
-[![Java](https://img.shields.io/badge/Java-17%2B-orange?style=flat-square&logo=openjdk)](https://www.oracle.com/java/)
-[![Paradigma](https://img.shields.io/badge/Paradigma-POO-blue?style=flat-square)](#-decisões-de-arquitetura-e-poo)
-
-Aplicação desenvolvida em Java puro com foco no domínio de **Programação Orientada a Objetos (POO)**, aplicando regras rígidas de encapsulamento, imutabilidade, associação entre objetos e integridade de dados financeiros.
+Sistema de gerenciamento bancário desenvolvido em **Java Core**, focado na aplicação de arquitetura orientada a objetos (POO), gerenciamento de coleções com `Map` e `List`, tratamento de exceções customizadas, transferências entre contas e histórico de extrato cronológico.
 
 ---
 
-## 🎯 Objetivo do Projeto
+## 🎯 Funcionalidades
 
-Modelar e simular o funcionamento de uma estrutura bancária sem o uso de frameworks externos, garantindo a implementação manual da lógica de negócios, validações de segurança em memória, transferências entre contas e refatoração para código limpo via métodos privados.
-
----
-
-## 🛡️ Decisões de Arquitetura e POO
-
-O projeto foi desenhado seguindo boas práticas de POO e Clean Code:
-
-1. **Proteção de Saldo (Sem `setSaldo`):** 
-   - A alteração do saldo de uma conta é **estritamente proibida** via métodos modificadores diretos (`setters`).
-   - O saldo só é alterado através de operações de domínio encapsuladas (`depositarValor`, `sacarValor` e `transferir`).
-
-2. **Abstração com Métodos Privados Auxiliares:**
-   - Criação de métodos privados (`executarSaque` e `executarDeposito`) para realizar mutações de saldo em memória de forma silenciosa.
-   - Elimina a duplicação/poluição de mensagens no terminal em operações compostas (como a transferência), garantindo que cada método público exiba apenas seu próprio comprovante.
-
-3. **Associação de Objetos (Transferência Bancária):**
-   - Implementação de relacionamento direto entre duas instâncias no método `transferir(double valor, ContaBancaria contaDestino)`.
-   - Garante que o saldo seja debitado da conta de origem e creditado na conta de destino de forma atômica e validada.
-
-4. **Imutabilidade de Dados Sensíveis:**
-   - O CPF do cliente é definido obrigatoriamente no construtor e não possui método `setCpf()`, impedindo a adulteração do cadastro do titular durante a execução.
-
-5. **Garantia de Estado Válido:**
-   - Uma `ContaBancaria` nasce obrigatoriamente vinculada a um `Cliente` e com saldo inicial zerado (`0.0`), evitando a existência de contas "fantasmas" ou saldos arbitrários na criação.
+- **Cadastro de Clientes e Contas:** Associação de contas bancárias a clientes (`Cliente` e `ContaBancaria`).
+- **Gerenciamento do Banco:** Armazenamento e busca eficiente de contas via `Map<Integer, ContaBancaria>`.
+- **Operações Bancárias:**
+  - Depósitos e saques com validação em tempo real.
+  - Transferências entre contas com atualização automática do extrato em ambas as pontas.
+- **Histórico de Extrato:** Registro cronológico de transações com data e hora formatadas (`dd/MM/yyyy HH:mm`).
+- **Tratamento de Erros:** Exceções personalizadas (`SaldoInsuficienteException` e `ContaNaoEncontradaException`) para garantir regras de negócio seguras.
 
 ---
 
-## 🚀 Funcionalidades
+## 🛠️ Tecnologias e Conceitos Utilizados
 
-- [x] **Cadastro de Clientes:** Criação de titulares com validação obrigatória de Nome e CPF via construtor.
-- [x] **Abertura de Conta:** Associação automática entre número de conta e titular.
-- [x] **Depósito Controlado:** Bloqueio de depósitos zerados ou negativos.
-- [x] **Saque Seguro:** Validação dupla que impede saques negativos e bloqueia operações que excedam o saldo disponível.
-- [x] **Transferência entre Contas:** Movimentação direta de saldo entre instâncias de `ContaBancaria` com verificação de saldo e mensagens de saída limpas.
+- **Linguagem:** Java (JDK 17+)
+- **Coleções (Collections Framework):**
+  - `List` / `ArrayList` para histórico sequencial do extrato.
+  - `Map` / `HashMap` para busca de contas em tempo $O(1)$.
+- **Datas e Horas:** `java.time.LocalDateTime` e `java.time.format.DateTimeFormatter`.
+- **Exceções Personalizadas:** Herança de `Exception` para capturar regras de negócio violadas.
+- **Arquitetura em Pacotes:** Separação clara de responsabilidades entre modelo e exceções (`model` e `exception`).
 
 ---
 
-## 💻 Como Executar o Projeto
+## 📂 Estrutura do Projeto
 
-### Pré-requisitos
-- **JDK 17** ou superior instalado.
-- Terminal / Prompt de Comando ou qualquer IDE Java (VS Code, IntelliJ, Eclipse).
+```text
+sistema-bancario-java/
+└── src/
+    ├── exception/
+    │   ├── ContaNaoEncontradaException.java
+    │   └── SaldoInsuficienteException.java
+    ├── model/
+    │   ├── Banco.java
+    │   ├── Cliente.java
+    │   └── ContaBancaria.java
+    └── Main.java
+```
 
-### Passo a passo via Terminal
+---
+
+## 🚀 Como Executar
 
 1. **Clone o repositório:**
    ```bash
-   git clone [https://github.com/andersoncabrall/sistema-bancario-java.git](https://github.com/andersoncabrall/sistema-bancario-java.git)
+   git clone https://github.com/andersoncabrall/sistema-bancario-java.git
+   ```
+
+2. **Acesse a pasta do projeto:**
+   ```bash
    cd sistema-bancario-java
    ```
 
-2. **Compile as classes:**
-   ```bash
-   javac src/*.java
-   ```
-
-3. **Execute a aplicação:**
-   ```bash
-   java -cp src Main
-   ```
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-- **Linguagem:** Java
-- **IDE:** Visual Studio Code / IntelliJ IDEA
-- **Controle de Versão:** Git & GitHub
+3. **Compile e execute a classe `Main.java`** através do VS Code ou sua IDE de preferência.
